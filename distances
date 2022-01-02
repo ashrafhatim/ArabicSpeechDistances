@@ -9,9 +9,9 @@ from glob import glob
 import tensorflow.compat.v1 as tf
 from tqdm import tqdm
 
-from utils import predict, load_file_to_data, to_cuda
+from utils import *
 from exceptions import CustomError
-from preprocessing import get_speech_frames
+# from preprocessing import get_speech_frames
 
 import torch
 
@@ -75,10 +75,10 @@ class AudioDistance(object):
 
         return distribution
 
-    def get_stats(self, distribution):
-        mu = torch.mean(distribution, axis=0)
-        sigma = torch.cov(distribution.T)
-        return mu, sigma.numpy()
+    # def stats(self, distribution):
+    #     mu = torch.mean(distribution, axis=0)
+    #     sigma = torch.cov(distribution.T)
+    #     return mu, sigma.numpy()
 
 
 
