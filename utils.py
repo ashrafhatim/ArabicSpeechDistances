@@ -74,7 +74,7 @@ def normalize_signal(signal):
 
 
 def get_speech_frames(signal,
-                        sample_freq,
+                        sample_freq=22050 ,
                         num_features=160,
                         pad_to=8,
                         window_size=20e-3,
