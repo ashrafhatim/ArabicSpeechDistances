@@ -50,7 +50,7 @@ def subsample_audio(file_path, sample_path, num_samples=1000,
   # start = np.random.randint(0, base_wav.shape[0] - length + 1,
   #                           size=(2 * num_samples, ))
 
-  start = np.range(0, base_wav.shape[0] - length + 1, num_samples)
+  start = np.linspace(0, base_wav.shape[0] - length + 1, num_samples)
 
   # noise_levels = np.logspace(-3, -1, num_noise_levels)
 
