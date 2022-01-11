@@ -30,7 +30,7 @@ def _mkdir(path):
   if not os.path.exists(path):
     os.makedirs(path)
 
-def subsample_audio(file_path, sample_path, num_samples=1000,
+def subsample_audio(file_path, sample_path, save_file_name, sample_num, num_samples=1000,
                     num_noise_levels=3, length=2):
   """Helper sampling function.
 
@@ -55,13 +55,13 @@ def subsample_audio(file_path, sample_path, num_samples=1000,
   # noise_levels = np.logspace(-3, -1, num_noise_levels)
 
   _mkdir(sample_path)
-  _mkdir(os.path.join(sample_path, 'ref'))
+  _mkdir(os.path.join(sample_path, save_file_name))
   # for i in range(num_noise_levels):
   #   _mkdir(os.path.join(sample_path, f'noisy_{i + 1}'))
 
   for k, start_k in enumerate(tqdm(start, desc='Saving audio sample files')):
     window = base_wav[start_k: start_k + length]
-    write(os.path.join(sample_path, 'ref', '%05d.wav' % (k + 1)), freq, window)
+    write(os.path.join(sample_path, save_file_name, '%03d_%05d.wav' % (sample_num, (k + 1))), freq, window)
 
     # for i, noise_level in enumerate(noise_levels):
     #   noisy_window = window + np.random.normal(scale=noise_level, size=(length, ))
