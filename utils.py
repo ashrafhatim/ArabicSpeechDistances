@@ -52,22 +52,22 @@ def subsample_audio(file_path, sample_path, num_samples=1000,
 
   start = np.range(0, base_wav.shape[0] - length + 1, num_samples)
 
-  noise_levels = np.logspace(-3, -1, num_noise_levels)
+  # noise_levels = np.logspace(-3, -1, num_noise_levels)
 
   _mkdir(sample_path)
   _mkdir(os.path.join(sample_path, 'ref'))
-  for i in range(num_noise_levels):
-    _mkdir(os.path.join(sample_path, f'noisy_{i + 1}'))
+  # for i in range(num_noise_levels):
+  #   _mkdir(os.path.join(sample_path, f'noisy_{i + 1}'))
 
   for k, start_k in enumerate(tqdm(start, desc='Saving audio sample files')):
     window = base_wav[start_k: start_k + length]
     write(os.path.join(sample_path, 'ref', '%05d.wav' % (k + 1)), freq, window)
 
-    for i, noise_level in enumerate(noise_levels):
-      noisy_window = window + np.random.normal(scale=noise_level, size=(length, ))
-      noisy_window = np.clip(noisy_window * 2 ** 15, -2 ** 15, 2 ** 15 - 1)
-      write(os.path.join(sample_path, f'noisy_{i + 1}', '%05d.wav' % (k + 1)),
-            freq, noisy_window.astype(np.int16))
+    # for i, noise_level in enumerate(noise_levels):
+    #   noisy_window = window + np.random.normal(scale=noise_level, size=(length, ))
+    #   noisy_window = np.clip(noisy_window * 2 ** 15, -2 ** 15, 2 ** 15 - 1)
+    #   write(os.path.join(sample_path, f'noisy_{i + 1}', '%05d.wav' % (k + 1)),
+    #         freq, noisy_window.astype(np.int16))
 
 def normalize_signal(signal):
   """
