@@ -59,7 +59,8 @@ def subsample_audio(file_path, sample_path, save_file_name, sample_num, num_samp
   # for i in range(num_noise_levels):
   #   _mkdir(os.path.join(sample_path, f'noisy_{i + 1}'))
 
-  for k, start_k in enumerate(tqdm(start, desc='Saving audio sample files')):
+  for k, start_k in enumerate(start):
+    start_k = int(start_k)
     window = base_wav[start_k: start_k + length]
     write(os.path.join(sample_path, save_file_name, '%03d_%05d.wav' % (sample_num, (k + 1))), freq, window)
 
