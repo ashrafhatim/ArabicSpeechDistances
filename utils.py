@@ -30,8 +30,8 @@ def _mkdir(path):
   if not os.path.exists(path):
     os.makedirs(path)
 
-def subsample_audio(file_path, sample_path, save_file_name, sample_num, num_samples=1000,
-                    num_noise_levels=3, length=2):
+def subsample_audio(file, sample_path, save_file_name, sample_num, num_samples=1000,
+                    num_noise_levels=3, length=2, freq = None):
   """Helper sampling function.
 
   Args:
@@ -43,7 +43,11 @@ def subsample_audio(file_path, sample_path, save_file_name, sample_num, num_samp
        noise levels chosen from logspace between 10^-3 and 10^-1.5.
     length: Length of subsampled clips, in seconds.
   """
-  freq, base_wav = read(file_path)
+  if file != None:
+    freq, base_wav = read(file)
+  elif freq != None:
+    freq, base_wav = freq, file
+    
   base_wav = base_wav.astype(np.float32) / 2**15
   length *= freq
 
