@@ -69,7 +69,7 @@ class AudioDistance(object):
         paths = glob(samples_path + "/*")
         distribution = torch.empty((len(paths), 1600))
         for i,path in enumerate(tqdm(paths)):
-            audio = load_file_to_data(path)["speech"]
+            audio = load_file_to_data(path, srate = 22050)["speech"]
             features = self.get_features(audio)
             distribution[i, :] = features    
 
