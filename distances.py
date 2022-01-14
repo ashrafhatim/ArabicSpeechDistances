@@ -13,6 +13,9 @@ from utils import *
 from exceptions import CustomError
 # from preprocessing import get_speech_frames
 
+from dataset import custom_dataset
+from torch.utils.data import DataLoader
+
 import torch
 
 from transformers import (Wav2Vec2ForCTC,Wav2Vec2Processor)
@@ -58,19 +61,29 @@ class AudioDistance(object):
 
         return out
 
-    def get_features(self, audio):
-        frames = get_speech_frames(audio, sample_freq = 16000, window_size=40e-3,
-                        window_stride=20e-3)
+    # def get_features(self, audio):
+    def get_features(self, frames):
+        # frames = get_speech_frames(audio, sample_freq = 16000, window_size=40e-3,
+        #                 window_stride=20e-3)
         activations = self.get_activations(frames)
         features = activations.sum(axis=0)/activations.size()[0]
         return features
 
     def get_distribution(self, samples_path):
         paths = glob(samples_path + "/*")
+
+
+        test_set = custom_dataset(paths)
+        test_loader = DataLoader(test_set, batch_size=1)
+        
         distribution = torch.empty((len(paths), 1600))
-        for i,path in enumerate(tqdm(paths)):
-            audio = load_file_to_data(path, srate = 22050)["speech"]
-            features = self.get_features(audio)
+        # for i,path in enumerate(tqdm(paths)):
+        for i,frames in enumerate(test_loader):
+            # audio = load_file_to_data(path, srate = 22050)["speech"]
+            # features = self.get_features(audio)
+            
+            frames.squeeze_(0)
+            features = self.get_features(frames)
             distribution[i, :] = features    
 
         return distribution
