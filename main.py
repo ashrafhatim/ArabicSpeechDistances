@@ -63,7 +63,7 @@ def get_distance(file_paths, sample_path, save_file_name, num_samples, length, m
         for sample_num, file_path in enumerate(file_paths):
             subsample_audio(file_path, sample_path, save_file_name, sample_num=sample_num+1, num_samples=num_samples, length=length)
     else:
-        generator.load_state_dict(torch.load(model_path))
+        generator.load_state_dict(torch.load(model_path, map_location='cuda:0'))
         # print("subsample the generated audios")
         # for sample_num, file_path in enumerate(tqdm(file_paths)):
         for sample_num, file_path in enumerate(file_paths):
