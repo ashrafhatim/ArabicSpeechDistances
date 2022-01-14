@@ -43,7 +43,7 @@ def subsample_audio(file, sample_path, save_file_name, sample_num, num_samples=1
        noise levels chosen from logspace between 10^-3 and 10^-1.5.
     length: Length of subsampled clips, in seconds.
   """
-  if file != None:
+  if type(file) == str:
     freq, base_wav = read(file)
   elif freq != None:
     freq, base_wav = freq, file
