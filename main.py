@@ -21,13 +21,13 @@ from tqdm import tqdm
 sys.path.insert(0,'/home/jupyter/ArabicSpeechDistances')
 from distances import AudioDistance
 from utils import *
-model = AudioDistance()
+# model = AudioDistance()
 
 sys.path.insert(0,'/home/jupyter/melgan-neurips-custom')
 from mel2wav.modules import Generator, Discriminator, Audio2Mel
 
-generator = Generator(80, 32, 3).cuda().eval()
-fft = Audio2Mel(n_mel_channels=80).cuda()
+# generator = Generator(80, 32, 3).cuda().eval()
+# fft = Audio2Mel(n_mel_channels=80).cuda()
 
 
 def load_wav_to_torch(full_path, sampling_rate):
@@ -44,13 +44,19 @@ def load_wav_to_torch(full_path, sampling_rate):
     return torch.from_numpy(data).float(), sampling_rate
 
 
-def get_distance(file_paths, sample_path, save_file_name, num_samples, length, mu_0=None, sigma_0=None, model_path=None):
-    def generate_sample(file_path, fft, generator):
+def get_distance(file_paths, sample_path, save_file_name, num_samples, length, mu_0=None, sigma_0=None, model_path=None, gpu_id=0):
+    
+    model = AudioDistance(gpu_id=gpu_id)
+
+    generator = Generator(80, 32, 3).cuda(gpu_id).eval()
+    fft = Audio2Mel(n_mel_channels=80).cuda(gpu_id)
+
+    def generate_sample(file_path, fft):
         audio, sampling_rate = load_wav_to_torch(file_path, 22050)
         segment_length = 8192
         audio.unsqueeze(0)
 
-        x_t = audio.unsqueeze(0).cuda()
+        x_t = audio.unsqueeze(0).cuda(gpu_id)
         s_t = fft(x_t).detach()
         x_pred_t = generator(s_t).cpu().detach().numpy()
 
@@ -63,7 +69,7 @@ def get_distance(file_paths, sample_path, save_file_name, num_samples, length, m
         for sample_num, file_path in enumerate(file_paths):
             subsample_audio(file_path, sample_path, save_file_name, sample_num=sample_num+1, num_samples=num_samples, length=length)
     else:
-        generator.load_state_dict(torch.load(model_path, map_location='cuda:0'))
+        generator.load_state_dict(torch.load(model_path, map_location='cuda:%d' % gpu_id))
         # print("subsample the generated audios")
         # for sample_num, file_path in enumerate(tqdm(file_paths)):
         for sample_num, file_path in enumerate(file_paths):
@@ -96,6 +102,7 @@ def parse_args():
     parser.add_argument("--length", type=int, default=1)
     parser.add_argument("--model_path", default=None)
     parser.add_argument("--exp_path", default=None)
+    parser.add_argument("--gpu_id", type=int, default=0)
 
     args = parser.parse_args()
     return args
@@ -109,7 +116,7 @@ def main():
                         
                         
     sys.path.insert(0,'/home/jupyter/ArabicSpeechDistances')
-    ref_stats = torch.load( "ref_stats.py")
+    ref_stats = torch.load( "ref_stats.pt")
     mu_0 = ref_stats["mu"]
     sigma_0 = ref_stats["sigma"]
     
@@ -125,7 +132,8 @@ def main():
             length = args.length,
             mu_0=mu_0, 
             sigma_0=sigma_0, 
-            model_path=model_path
+            model_path=model_path,
+            gpu_id=args.gpu_id
         )
         
         

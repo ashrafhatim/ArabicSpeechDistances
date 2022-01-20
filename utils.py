@@ -143,7 +143,7 @@ def load_file_to_data(file, srate = 16_000):
     batch["sampling_rate"] = sampling_rate
     return batch
 
-def to_cuda(elements):
+def to_cuda(elements, gpu_id):
     """
     Transfers elements to cuda if GPU is available
     Args:
@@ -153,7 +153,7 @@ def to_cuda(elements):
         elements: same as input on GPU memory, if available
     """
     if torch.cuda.is_available():
-        return elements.cuda()
+        return elements.cuda(gpu_id)
     return elements
 
 # Modified from: https://github.com/bioinf-jku/TTUR/blob/master/fid.py

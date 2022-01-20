@@ -26,10 +26,11 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class AudioDistance(object):
     """Main DeepSpeech Distance evaluation class."""
 
-    def __init__(self, model_dir='elgeish/wav2vec2-large-xlsr-53-arabic', max_length=128000, sr=16000):
+    def __init__(self, model_dir='elgeish/wav2vec2-large-xlsr-53-arabic', max_length=128000, sr=16000, gpu_id=0):
         self.model_dir = model_dir
         self.max_length = max_length
         self.sr = sr
+        self.gpu_id=gpu_id
 
         self.model = Wav2Vec2ForCTC.from_pretrained(self.model_dir).to(device)
         self.model.wav2vec2.feature_projection.register_forward_hook(self.output_hook)
@@ -51,7 +52,7 @@ class AudioDistance(object):
 
         input_values = input_features.input_values
         input_values.squeeze_(0)
-        input_values = to_cuda(input_values)
+        input_values = to_cuda(input_values, self.gpu_id)
 
         try: _ = self.model(input_values)
         except CustomError: pass
