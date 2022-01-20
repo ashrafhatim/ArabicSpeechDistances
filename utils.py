@@ -22,10 +22,6 @@ import resampy as rs
 import python_speech_features as psf
 
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-
-
 def _mkdir(path):
   if not os.path.exists(path):
     os.makedirs(path)

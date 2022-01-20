@@ -21,7 +21,7 @@ import torch
 from transformers import (Wav2Vec2ForCTC,Wav2Vec2Processor)
 
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class AudioDistance(object):
     """Main DeepSpeech Distance evaluation class."""
@@ -32,7 +32,7 @@ class AudioDistance(object):
         self.sr = sr
         self.gpu_id=gpu_id
 
-        self.model = Wav2Vec2ForCTC.from_pretrained(self.model_dir).to(device)
+        self.model = Wav2Vec2ForCTC.from_pretrained(self.model_dir).cuda(self.gpu_id)
         self.model.wav2vec2.feature_projection.register_forward_hook(self.output_hook)
         self.processor = Wav2Vec2Processor.from_pretrained(self.model_dir)
 
