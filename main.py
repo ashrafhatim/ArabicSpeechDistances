@@ -46,10 +46,10 @@ def load_wav_to_torch(full_path, sampling_rate):
 
 def get_distance(file_paths, sample_path, save_file_name, num_samples, length, mu_0=None, sigma_0=None, model_path=None, gpu_id=0):
     
-    model = AudioDistance(gpu_id=gpu_id)
+    # model = AudioDistance(gpu_id=gpu_id)
 
-    generator = Generator(80, 32, 3).cuda(gpu_id).eval()
-    fft = Audio2Mel(n_mel_channels=80).cuda(gpu_id)
+    # generator = Generator(80, 32, 3).cuda(gpu_id).eval()
+    # fft = Audio2Mel(n_mel_channels=80).cuda(gpu_id)
 
     def generate_sample(file_path, fft, generator):
         audio, sampling_rate = load_wav_to_torch(file_path, 22050)
@@ -108,8 +108,8 @@ def parse_args():
     return args
 
 
-def main():
-    args = parse_args()
+def main(args):
+    
     # print("agument: ", args.augment)
     root = Path(args.exp_path)
     writer = SummaryWriter(str(root / "FID_tensorboard"))
@@ -119,6 +119,8 @@ def main():
     ref_stats = torch.load( "ref_stats.pt")
     mu_0 = ref_stats["mu"]
     sigma_0 = ref_stats["sigma"]
+
+    
     
     
     for i in tqdm(range(5000, 500000, 5000)):
@@ -143,4 +145,10 @@ def main():
     
 
 if __name__ == "__main__":
-    main()
+    args = parse_args()
+    model = AudioDistance(gpu_id=args.gpu_id)
+
+    generator = Generator(80, 32, 3).cuda(args.gpu_id).eval()
+    fft = Audio2Mel(n_mel_channels=80).cuda(args.gpu_id)
+
+    main(args)
