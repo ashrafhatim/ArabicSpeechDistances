@@ -51,7 +51,7 @@ def get_distance(file_paths, sample_path, save_file_name, num_samples, length, m
     generator = Generator(80, 32, 3).cuda(gpu_id).eval()
     fft = Audio2Mel(n_mel_channels=80).cuda(gpu_id)
 
-    def generate_sample(file_path, fft):
+    def generate_sample(file_path, fft, generator):
         audio, sampling_rate = load_wav_to_torch(file_path, 22050)
         segment_length = 8192
         audio.unsqueeze(0)
