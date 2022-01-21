@@ -17,7 +17,7 @@ class custom_dataset(Dataset):
 
         # audio = self.audios[idx]
 
-        frames = get_speech_frames(audio, sample_freq = 16000, window_size=40e-3,
+        frames = get_speech_frames(audio, sample_freq = 22050, window_size=40e-3,
                         window_stride=20e-3)
         return frames
 

@@ -58,7 +58,7 @@ def get_distance(file_paths, sample_path, save_file_name, num_samples, length, m
 
         x_t = audio.unsqueeze(0).cuda(gpu_id)
         s_t = fft(x_t).detach()
-        x_pred_t = generator(s_t).cpu().detach().numpy()
+        x_pred_t = generator(s_t).view(-1).cpu().detach().numpy()
 
         return x_pred_t, sampling_rate
     
