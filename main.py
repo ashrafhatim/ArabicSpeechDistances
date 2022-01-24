@@ -53,7 +53,7 @@ def get_distance(file_paths, sample_path, save_file_name, num_samples, length, m
 
     def generate_sample(file_path, fft, generator):
         audio, sampling_rate = load_wav_to_torch(file_path, 22050)
-        segment_length = 8192
+        # segment_length = 8192
         audio.unsqueeze(0)
 
         x_t = audio.unsqueeze(0).cuda(gpu_id)
@@ -96,7 +96,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--file_paths", type=list, default=glob("/home/jupyter/data/arabic-speech-corpus/test set/wav/*.wav"))
     parser.add_argument("--sample_path", default="/home/jupyter/data/arabic-speech-corpus")
-    parser.add_argument("--save_file_name", default="generated")
+    parser.add_argument("--save_file_name", default="generated_2")
 
     parser.add_argument("--num_samples", type=int, default=30)
     parser.add_argument("--length", type=int, default=1)
@@ -112,7 +112,7 @@ def main(args):
     
     # print("agument: ", args.augment)
     root = Path(args.exp_path)
-    writer = SummaryWriter(str(root / "FID_tensorboard"))
+    writer = SummaryWriter(str(root / "FID_tensorboard_2"))
                         
                         
     sys.path.insert(0,'/home/jupyter/ArabicSpeechDistances')

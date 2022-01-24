@@ -53,12 +53,17 @@ class AudioDistance(object):
         input_values = input_features.input_values
         input_values.squeeze_(0)
         input_values = to_cuda(input_values, self.gpu_id)
+        # print("input_values: ", input_values.shape)####
 
         try: _ = self.model(input_values)
         except CustomError: pass
-
-        out = torch.nn.functional.adaptive_avg_pool2d(self.activation["norm_hidden_states"], (40,40) )
-        out = out.view(data.shape[0], 1600)
+        
+        # print("norm_hidden_states: ", self.activation["norm_hidden_states"].shape) ######################################
+        # out = torch.nn.functional.adaptive_avg_pool2d(self.activation["norm_hidden_states"], (40,40) )
+        # out = self.activation["norm_hidden_states"].view(data.shape[0], -1)
+        out = self.activation["norm_hidden_states"].squeeze(1)
+        # print("out", out.shape) ####
+        # out = out.view(data.shape[0], 1600)
 
         return out
 
@@ -68,6 +73,7 @@ class AudioDistance(object):
         #                 window_stride=20e-3)
         activations = self.get_activations(frames)
         features = activations.sum(axis=0)/activations.size()[0]
+        # print("features: ", features.shape) ###
         return features
 
     def get_distribution(self, samples_path):
@@ -77,13 +83,15 @@ class AudioDistance(object):
         test_set = custom_dataset(paths)
         test_loader = DataLoader(test_set, batch_size=1)
         
-        distribution = torch.empty((len(paths), 1600))
+        distribution = torch.empty((len(paths), 512)) #####
         # for i,path in enumerate(tqdm(paths)):
         for i,frames in enumerate(test_loader):
             # audio = load_file_to_data(path, srate = 22050)["speech"]
             # features = self.get_features(audio)
             
             frames.squeeze_(0)
+            
+            # print("frames: ", frames.shape) #################
             features = self.get_features(frames)
             distribution[i, :] = features    
 

@@ -22,6 +22,8 @@ import resampy as rs
 import python_speech_features as psf
 
 
+
+
 def _mkdir(path):
   if not os.path.exists(path):
     os.makedirs(path)
@@ -51,6 +53,9 @@ def subsample_audio(file, sample_path, save_file_name, sample_num, num_samples=1
   #                           size=(2 * num_samples, ))
 
   start = np.linspace(0, base_wav.shape[0] - length + 1, num_samples)
+  # print(base_wav.shape[0], length,  freq)
+  # print(start)
+
 
   # noise_levels = np.logspace(-3, -1, num_noise_levels)
 
@@ -62,6 +67,10 @@ def subsample_audio(file, sample_path, save_file_name, sample_num, num_samples=1
   for k, start_k in enumerate(start):
     start_k = int(start_k)
     window = base_wav[start_k: start_k + length]
+    
+    # print("range", start_k, start_k + length)
+    # print("window", window)
+    
     write(os.path.join(sample_path, save_file_name, '%03d_%05d.wav' % (sample_num, (k + 1))), freq, window)
 
     # for i, noise_level in enumerate(noise_levels):
