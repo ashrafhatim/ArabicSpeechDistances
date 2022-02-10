@@ -123,7 +123,7 @@ def main(args):
     
     
     
-    for i in tqdm(range(5000, 500000, 5000)):
+    for i in tqdm(range(5000, 510000, 5000)):
         model_path = root / ("netG_%d.pt" % i)
                              
         distance = get_distance(
