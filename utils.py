@@ -43,10 +43,11 @@ def subsample_audio(file, sample_path, save_file_name, sample_num, num_samples=1
   """
   if type(file) == str:
     freq, base_wav = read(file)
+    base_wav = base_wav.astype(np.float32) / 2**15
   elif freq != None:
     freq, base_wav = freq, file
     
-  base_wav = base_wav.astype(np.float32) / 2**15
+  
   length *= freq
 
   # start = np.random.randint(0, base_wav.shape[0] - length + 1,
