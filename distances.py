@@ -26,7 +26,7 @@ from transformers import (Wav2Vec2ForCTC,Wav2Vec2Processor)
 class AudioDistance(object):
     """Main DeepSpeech Distance evaluation class."""
 
-    def __init__(self, model_dir='elgeish/wav2vec2-large-xlsr-53-arabic', max_length=128000, sr=16000, gpu_id=0):
+    def __init__(self, model_dir='elgeish/wav2vec2-large-xlsr-53-arabic', max_length=256000, sr=16000, gpu_id=0):
         self.model_dir = model_dir
         self.max_length = max_length
         self.sr = sr
