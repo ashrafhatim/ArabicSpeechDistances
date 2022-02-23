@@ -52,7 +52,7 @@ def subsample_audio(file, sample_path, save_file_name, sample_num, num_samples=1
   # start = np.random.randint(0, base_wav.shape[0] - length + 1,
   #                           size=(2 * num_samples, ))
 
-  start = np.linspace(0, base_wav.shape[0] - length + 1, num_samples)
+  start = np.linspace(0, base_wav.shape[0] - length, num_samples)
   # print(base_wav.shape[0], length,  freq)
   # print(start)
 

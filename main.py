@@ -99,7 +99,7 @@ def parse_args():
     parser.add_argument("--save_file_name", default="generated_2")
 
     parser.add_argument("--num_samples", type=int, default=30)
-    parser.add_argument("--length", type=int, default=1)
+    parser.add_argument("--length", type=int, default=2)
     parser.add_argument("--model_path", default=None)
     parser.add_argument("--exp_path", default=None)
     parser.add_argument("--gpu_id", type=int, default=0)
