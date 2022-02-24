@@ -21,6 +21,9 @@ import numpy as np
 import resampy as rs
 import python_speech_features as psf
 
+from librosa.core import load
+from librosa.util import normalize
+
 
 
 
@@ -42,12 +45,17 @@ def subsample_audio(file, sample_path, save_file_name, sample_num, num_samples=1
     length: Length of subsampled clips, in seconds.
   """
   if type(file) == str:
-    freq, base_wav = read(file)
-    base_wav = base_wav.astype(np.float32) / 2**15
+    # freq, base_wav = read(file)
+
+    base_wav, freq = load(file, sr=22050)
+    # base_wav = base_wav.astype(np.float32) / 2**15
+    base_wav = base_wav.astype(np.float32) 
+    base_wav = 0.95 * normalize(base_wav)
+
   elif freq != None:
-    freq, base_wav = freq, file
+    freq, base_wav = freq, file.astype(np.float32)
   
-  base_wav = normalize_signal(base_wav)
+  # base_wav = normalize_signal(base_wav)
   
   length *= freq
 
@@ -115,7 +123,7 @@ def get_speech_frames(signal,
     signal = rs.resample(signal, sample_freq, base_freq, filter='kaiser_best')
     sample_freq = base_freq
   
-  # signal = normalize_signal(signal)
+  signal = normalize_signal(signal)
 
   audio_duration = len(signal) * 1.0 / sample_freq
 
