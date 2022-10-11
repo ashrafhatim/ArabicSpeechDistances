@@ -1,5 +1,5 @@
 class CustomError(Exception):
-    """Exception raised for to stop the forward pass.
+    """Exception raised to stop the forward pass.
     """
 
     def __init__(self):
